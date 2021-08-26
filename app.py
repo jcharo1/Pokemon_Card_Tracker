@@ -6,6 +6,9 @@ from flask_migrate import Migrate
 from flask_wtf import form
 from forms import UserForm
 from models import db, setup_db, User, Binder
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def create_app(test_config=None):
   # create and configure the app
@@ -16,6 +19,8 @@ def create_app(test_config=None):
     from routes.user import user
     app.config.from_object('config')
     app.register_blueprint(user)
+    from routes.binder import binder
+    app.register_blueprint(binder)
     
     return app
 

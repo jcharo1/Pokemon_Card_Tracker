@@ -18,22 +18,81 @@ def create_user():
     form = UserForm(request.form)
     
 
-    # try: 
-    user = User(
-    name = form.name.data,
-    pokemongo_id = form.pokemongo_id.data
-    #   verified = form.verified.data
-    )
-    print(form.name.data)
-    db.session.add(user)
-    db.session.commit()
-    flash('User ' + request.form['name'] + ' was successfully added!')
-    # except ValueError as e:
-    #     print(e)
-    #     flash('An error occurred. Venue ' + form.name.data + ' could not be listed.')
-    # finally:
-    #     db.session.close()
-    #     print('=============wemadeit-----------------------------')
-    return {}
+    try: 
+        user = User(
+        name = form.name.data,
+        pokemongo_id = form.pokemongo_id.data
+        #   verified = form.verified.data
+        )
+        # print(form.name.data)
+        db.session.add(user)
+        db.session.commit()
+        db.session.close()
+        if user is None:
+            abort(404)
+        
+    except:
+        abort(422)
+    
+
+    return jsonify({
+        'success': True,
+
+    })
+
+@user.route('/', methods=['GET'])
+def retrieve_all_users():
+    try:
+        users = User.query.all()
+        # print(users)
+        # user = User.query.order_by('id').all()
+        user_list = []
+
+        for user in users:
+            user_list.append({
+                'id': user.id,
+                'name': user.name,
+                'verified': user.verified,
+                'pokemongo_id': user.pokemongo_id
+            })
+        # print(user_list)
+        
+
+        if users is None:
+            abort(404)
+            
+    except Exception as e:
+        print(e)
+        abort(422)
+        
+
+    return jsonify({
+            'success': True,
+            'users': user_list
+
+        })
+
+
 
   
+
+
+
+
+
+
+@user.errorhandler(404)
+def not_found(error):
+    return jsonify({
+        "success": False,
+        "error": 404,
+        "message": "resource not found"
+    }), 404
+
+@user.errorhandler(422)
+def unprocessable(error):
+    return jsonify({
+        "success": False,
+        "error": 422,
+        "message": "unprocessable"
+    }), 422

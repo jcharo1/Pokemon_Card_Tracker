@@ -9,5 +9,15 @@ class UserForm(Form):
     pokemongo_id = StringField(
         'pokemongo_id' 
     )
-    # verified = BooleanField( 'verified' 
-    # )
+    verified = BooleanField( 'verified' 
+    )
+
+
+
+class BinderForm(Form):
+    pokemon_id = StringField(
+        'pokemon_id'
+    )
+    user_id = StringField(
+        'user_id' 
+    )
