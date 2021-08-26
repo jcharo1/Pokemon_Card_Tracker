@@ -1,117 +1,39 @@
 import os
-from flask import Flask, request, abort, jsonify
+from flask import Flask, request, abort, jsonify, flash
+from flask_wtf import form
+from forms import UserForm
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-
+from models import User
 from flask import current_app, Blueprint, render_template
 user = Blueprint('user', __name__, url_prefix='/user')
 
-@user.route('/')
-def pokemonex():
-    hello = 'this is a test'
-    card = Card.find('xy1-1')
+db = SQLAlchemy()
+
+@user.route('/create', methods=['POST'])
+def create_user():
+  
+    # print(request.form)
+    # print('------------------------------')
+    form = UserForm(request.form)
     
-    return jsonify({
-        "data": {
-        "id": "xy1-1",
-        "name": "Venusaur-EX",
-        "supertype": "Pokémon",
-        "subtypes": [
-            "Basic",
-            "EX"
-        ],
-        "hp": "180",
-        "types": [
-            "Grass"
-        ],
-        "evolvesTo": [
-            "M Venusaur-EX"
-        ],
-        "rules": [
-            "Pokémon-EX rule: When a Pokémon-EX has been Knocked Out, your opponent takes 2 Prize cards."
-        ],
-        "attacks": [
-            {
-            "name": "Poison Powder",
-            "cost": [
-                "Grass",
-                "Colorless",
-                "Colorless"
-            ],
-            "convertedEnergyCost": 3,
-            "damage": "60",
-            "text": "Your opponent's Active Pokémon is now Poisoned."
-            },
-            {
-            "name": "Jungle Hammer",
-            "cost": [
-                "Grass",
-                "Grass",
-                "Colorless",
-                "Colorless"
-            ],
-            "convertedEnergyCost": 4,
-            "damage": "90",
-            "text": "Heal 30 damage from this Pokémon."
-            }
-        ],
-        "weaknesses": [
-            {
-            "type": "Fire",
-            "value": "×2"
-            }
-        ],
-        "retreatCost": [
-            "Colorless",
-            "Colorless",
-            "Colorless",
-            "Colorless"
-        ],
-        "convertedRetreatCost": 4,
-        "set": {
-            "id": "xy1",
-            "name": "XY",
-            "series": "XY",
-            "printedTotal": 146,
-            "total": 146,
-            "legalities": {
-            "unlimited": "Legal",
-            "expanded": "Legal"
-            },
-            "ptcgoCode": "XY",
-            "releaseDate": "2014/02/05",
-            "updatedAt": "2018/03/04 10:35:00",
-            "images": {
-            "symbol": "https://images.pokemontcg.io/xy1/symbol.png",
-            "logo": "https://images.pokemontcg.io/xy1/logo.png"
-            }
-        },
-        "number": "1",
-        "artist": "Eske Yoshinob",
-        "rarity": "Rare Holo EX",
-        "nationalPokedexNumbers": [
-            3
-        ],
-        "legalities": {
-            "unlimited": "Legal",
-            "expanded": "Legal"
-        },
-        "images": {
-            "small": "https://images.pokemontcg.io/xy1/1.png",
-            "large": "https://images.pokemontcg.io/xy1/1_hires.png"
-        },
-        "tcgplayer": {
-            "url": "https://prices.pokemontcg.io/tcgplayer/xy1-1",
-            "updatedAt": "2021/07/09",
-            "prices": {
-            "holofoil": {
-                "low": 1.0,
-                "mid": 3.46,
-                "high": 12.95,
-                "market": 3.32,
-                "directLow": 2.95
-            }
-            }
-        }
-        }
-        })
+
+    # try: 
+    user = User(
+    name = form.name.data,
+    pokemongo_id = form.pokemongo_id.data
+    #   verified = form.verified.data
+    )
+    print(form.name.data)
+    db.session.add(user)
+    db.session.commit()
+    flash('User ' + request.form['name'] + ' was successfully added!')
+    # except ValueError as e:
+    #     print(e)
+    #     flash('An error occurred. Venue ' + form.name.data + ' could not be listed.')
+    # finally:
+    #     db.session.close()
+    #     print('=============wemadeit-----------------------------')
+    return {}
+
+  
