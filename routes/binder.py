@@ -39,3 +39,34 @@ def add_pokemon_card():
         'success': True,
 
     })
+
+# @binder.route('/delete-card', methods=['POST'])
+# def add_pokemon_card():
+  
+#     # print(request.form)
+#     # print('------------------------------')
+#     form = BinderForm(request.form)
+    
+
+#     try: 
+#         binder = Binder(
+#         pokemon_id = form.pokemon_id.data,
+#         user_id = form.user_id.data
+#         )
+#         # print(form.name.data)
+#         db.session.add(binder)
+#         db.session.commit()
+#         db.session.close()
+#         if binder is None:
+#             abort(404)
+        
+#     except Exception as e:
+#         print(e)
+#         abort(422)
+    
+
+#     return jsonify({
+#         'success': True,
+
+#     })
+

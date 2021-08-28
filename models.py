@@ -23,6 +23,7 @@ class User(db.Model):
     name = db.Column(db.String(), nullable=False)
     verified = db.Column(db.Boolean, default=False)
     pokemongo_id = db.Column(db.String(), nullable=False)
+    pokemon_cards = db.relationship('Binder', backref='user', lazy=True)
 
 class Binder(db.Model):
     __tablename__ = 'Binder'

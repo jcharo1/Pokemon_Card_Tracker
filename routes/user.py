@@ -4,12 +4,16 @@ from flask_wtf import form
 from forms import UserForm
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from models import User
+from models import User, Binder
 from flask import current_app, Blueprint, render_template
+import json
 user = Blueprint('user', __name__, url_prefix='/user')
+
 
 db = SQLAlchemy()
 
+all_pokemon_set = open('pokemonSets/all_pokemon.json')
+all_pokemon = json.load(all_pokemon_set)
 @user.route('/create', methods=['POST'])
 def create_user():
   
@@ -72,6 +76,46 @@ def retrieve_all_users():
 
         })
 
+
+@user.route('/<int:id>', methods=['GET'])
+def retrieve_user_by_id(id):
+    try:
+        user = User.query.get(id)
+        # users = User.query.all()
+
+        binder = user.pokemon_cards
+        # print(binder)
+        pokemon_binder = []
+
+        for card in binder:
+            pokemon_id = card.__dict__['pokemon_id']
+            pokemon_binder.append(all_pokemon[pokemon_id])
+
+            
+            # print(all_pokemon[pokemon_id])
+            # print(card.__dict__['pokemon_id'])
+
+
+
+        if user is None:
+            abort(404)
+
+
+
+    except Exception as e:
+        print(e)
+        abort(422)
+        
+
+    return jsonify({
+            'success': True,
+            'id': user.id,
+            'name': user.name,
+            'verified': user.verified,
+            'pokemongo_id': user.pokemongo_id,
+            'pokemon_cards': pokemon_binder
+
+        })
 
 
   
