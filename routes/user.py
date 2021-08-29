@@ -63,7 +63,7 @@ def retrieve_all_users():
         
 
         if users is None:
-            abort(404)
+            not_found(404)
             
     except Exception as e:
         print(e)
@@ -81,7 +81,7 @@ def retrieve_all_users():
 def retrieve_user_by_id(id):
     try:
         user = User.query.get(id)
-        # users = User.query.all()
+        
 
         binder = user.pokemon_cards
         # print(binder)
@@ -98,9 +98,7 @@ def retrieve_user_by_id(id):
 
 
         if user is None:
-            abort(404)
-
-
+            not_found(404)
 
     except Exception as e:
         print(e)
@@ -118,8 +116,41 @@ def retrieve_user_by_id(id):
         })
 
 
-  
 
+
+
+@user.route('/<int:id>', methods=['PATCH'])
+def edit_user(id):
+  
+    # print(request.form)
+    # # print('------------------------------')
+    # form = UserForm(request.form)
+    # user = User.query.get(id)
+
+
+    try: 
+        form = UserForm(request.form)
+        user = User.query.get(id)
+        
+        db.session.query(User).filter(User.id == id).update({
+            User.name:request.form['name'],
+            User.pokemongo_id:request.form['pokemongo_id']
+            })
+    
+        db.session.commit()
+        
+        if user is None:
+            abort(404)
+        
+    except Exception as e :
+        print(e)
+        abort(422)
+    
+
+    return jsonify({
+        'success': True,
+
+    })
 
 
 
