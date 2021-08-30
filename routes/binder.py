@@ -13,6 +13,7 @@ binder = Blueprint('binder', __name__, url_prefix='/binder')
 db = SQLAlchemy()
 
 @binder.route('/', methods=['POST'])
+@requires_auth('post:add-card')
 def add_pokemon_card():
   
     # print(request.form)
