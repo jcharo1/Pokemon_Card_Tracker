@@ -7,6 +7,8 @@ from flask_cors import CORS
 from models import User, Binder
 from flask import current_app, Blueprint, render_template
 import json
+from auth import AuthError, requires_auth
+from jose import jwt
 user = Blueprint('user', __name__, url_prefix='/user')
 
 
@@ -15,7 +17,8 @@ db = SQLAlchemy()
 all_pokemon_set = open('pokemonSets/all_pokemon.json')
 all_pokemon = json.load(all_pokemon_set)
 @user.route('/create', methods=['POST'])
-def create_user():
+@requires_auth('post:user')
+def create_user(jwt):
   
     # print(request.form)
     # print('------------------------------')
@@ -78,7 +81,8 @@ def retrieve_all_users():
 
 
 @user.route('/<int:id>', methods=['GET'])
-def retrieve_user_by_id(id):
+@requires_auth('get:user-id')
+def retrieve_user_by_id(jwt, id):
     try:
         user = User.query.get(id)
         
@@ -120,7 +124,8 @@ def retrieve_user_by_id(id):
 
 
 @user.route('/<int:id>', methods=['PATCH'])
-def edit_user(id):
+@requires_auth('patch:user')
+def edit_user(jwt, id):
   
     # print(request.form)
     # # print('------------------------------')

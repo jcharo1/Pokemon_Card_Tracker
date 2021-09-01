@@ -8,13 +8,15 @@ from flask_cors import CORS
 from models import User, Binder
 from flask import current_app, Blueprint, render_template
 import json
+from auth import AuthError, requires_auth
+from jose import jwt
 binder = Blueprint('binder', __name__, url_prefix='/binder')
 
 db = SQLAlchemy()
 
 @binder.route('/', methods=['POST'])
 @requires_auth('post:add-card')
-def add_pokemon_card():
+def add_pokemon_card(jwt):
   
     # print(request.form)
     # print('------------------------------')
@@ -44,7 +46,8 @@ def add_pokemon_card():
     })
 
 @binder.route('/', methods=['DELETE'])
-def delete_pokemon_card():
+@requires_auth('delete:card')
+def delete_pokemon_card(jwt):
     body = request.get_json()
     # print(request.form)
     # print('------------------------------')
