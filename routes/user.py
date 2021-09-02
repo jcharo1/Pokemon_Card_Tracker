@@ -51,8 +51,7 @@ def create_user(jwt):
 def retrieve_all_users():
     try:
         users = User.query.all()
-        # print(users)
-        # user = User.query.order_by('id').all()
+
         user_list = []
 
         for user in users:
@@ -62,11 +61,12 @@ def retrieve_all_users():
                 'verified': user.verified,
                 'pokemongo_id': user.pokemongo_id
             })
-        # print(user_list)
-        
+            
+        total_users =len(user_list)
 
-        if users is None:
-            not_found(404)
+        if (total_users == 0):
+            
+            return not_found(404)
             
     except Exception as e:
         print(e)
@@ -75,7 +75,8 @@ def retrieve_all_users():
 
     return jsonify({
             'success': True,
-            'users': user_list
+            'users': user_list,
+            'total users': len(user_list)
 
         })
 
