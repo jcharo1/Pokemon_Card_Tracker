@@ -19,33 +19,40 @@ all_pokemon = json.load(all_pokemon_set)
 @user.route('/create', methods=['POST'])
 @requires_auth('post:user')
 def create_user(jwt):
-  
+    
     # print(request.form)
     # print('------------------------------')
-    form = UserForm(request.form)
+    # form = UserForm(request.form)
     
 
     try: 
-        user = User(
-        name = form.name.data,
-        pokemongo_id = form.pokemongo_id.data
-        #   verified = form.verified.data
-        )
-        # print(form.name.data)
-        db.session.add(user)
-        db.session.commit()
-        db.session.close()
-        if user is None:
-            abort(404)
+        body = request.get_json()
+        name = body.get('name')
+        pokemongo_id = body.get('pokemongo_id')
         
-    except:
+        print(type(name))
+        noName = name == "" or name == None
+        noPokemongo_id = pokemongo_id == "" or pokemongo_id == None
+        if ( (noName) or (noPokemongo_id)):
+             return bad_request(400)
+        else: 
+            user = User(name=name,
+            pokemongo_id=pokemongo_id)
+            
+
+            db.session.add(user)
+            db.session.commit()
+            db.session.close()
+        
+    except Exception as e:
+        print(e)
+
         abort(422)
     
 
     return jsonify({
-        'success': True,
+        'success': True,})
 
-    })
 
 @user.route('/', methods=['GET'])
 def retrieve_all_users():
@@ -96,9 +103,6 @@ def retrieve_user_by_id(jwt, id):
             pokemon_id = card.__dict__['pokemon_id']
             pokemon_binder.append(all_pokemon[pokemon_id])
 
-            
-            # print(all_pokemon[pokemon_id])
-            # print(card.__dict__['pokemon_id'])
 
 
 
@@ -161,6 +165,14 @@ def edit_user(jwt, id):
 
 
 
+
+@user.errorhandler(400)
+def bad_request(error):
+    return jsonify({
+        "success": False,
+        "error": 400,
+        "message": "Bad Request"
+    }), 400
 
 @user.errorhandler(404)
 def not_found(error):

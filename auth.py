@@ -1,9 +1,10 @@
 import os
 import json
-from flask import request, _request_ctx_stack, abort
+from flask import request, _request_ctx_stack, abort, jsonify
 from functools import wraps
 from jose import jwt
 from urllib.request import urlopen
+
 
 
 AUTH0_DOMAIN = 'fsnd778.us.auth0.com'
@@ -133,7 +134,7 @@ def requires_auth(permission=''):
                 token = get_token_auth_header()
                 payload = verify_decode_jwt(token)
             except:
-                abort(401)
+                return unauthorized(401)
             
             check_permissions(permission,payload)
             
@@ -141,3 +142,11 @@ def requires_auth(permission=''):
 
         return wrapper
     return requires_auth_decorator
+
+
+def unauthorized(error):
+    return jsonify({
+        "success": False,
+        "error": 401,
+        "message": "Unauthorized"
+    }), 401

@@ -8,6 +8,11 @@ load_dotenv('.env')
 from app import create_app
 from models import setup_db, User, Binder
 
+ADMIN_TOKEN = os.environ['ADMIN_TOKEN']
+USER_TOKEN = os.environ['USER_TOKEN']
+def get_headers(token):
+    auth_header= {"Authorization": 'Bearer ' + (token)}
+    return auth_header
 
 class AppTestCase(unittest.TestCase):
     """This class represents the trivia test case"""
@@ -42,13 +47,53 @@ class AppTestCase(unittest.TestCase):
         self.assertTrue(data['total users']) 
     
     def create_new_user(self):
-        res = self.client().post('/user/create')
+        res = self.client().post('/user/create', json={"name": "ffff", "pokemongo_id": "ffff"}, headers=(get_headers(ADMIN_TOKEN)))
+                # res = self.client().post('/user/create', json={"name": "ffff","pokemongo_id": "ffff"}, headers={get_headers(ADMIN_TOKEN)})
+        print(res)
         data = json.loads(res.data)
         
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
 
+    
+        
+    def test_400_create_new_user(self):
+        res = self.client().post('/user/create', json={"name": "", "pokemongo_id": ""}, headers=(get_headers(ADMIN_TOKEN)))
+        data = json.loads(res.data)
+        
+
+        self.assertEqual(res.status_code, 400)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['error'], 400)
+        self.assertEqual(data['message'], "Bad Request")
+
+
+
+    def test_401_unauthorized_create_new_user(self):
+        res = self.client().post('/user/create', json={"name": "ash", "pokemongo_id": "12312555"}, headers=(get_headers(USER_TOKEN)))
+        print(res)
+        data = json.loads(res.data)
+        
+
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['error'], 401)
+        self.assertEqual(data['message'], "Unauthorized")
+    
+    def create_new_user(self):
+        res = self.client().post('/user/create', json={"name": "ffff", "pokemongo_id": "ffff"}, headers=(get_headers(ADMIN_TOKEN)))
+        print(res)
+        data = json.loads(res.data)
+        
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+
+
+
+
+    
     # def test_404_sent_if_users_is_none(self):
     #     # todo : create function that drops all users from db
     #     res = self.client().get('/user/')
