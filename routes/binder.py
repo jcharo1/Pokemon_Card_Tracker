@@ -18,22 +18,24 @@ db = SQLAlchemy()
 @requires_auth('post:add-card')
 def add_pokemon_card(jwt):
   
-    # print(request.form)
-    # print('------------------------------')
-    form = BinderForm(request.form)
-    
+    body = request.get_json()
+    pokemon_id = body.get('pokemon_id')
+    user_id = body.get('user_id')
 
     try: 
         binder = Binder(
-        pokemon_id = form.pokemon_id.data,
-        user_id = form.user_id.data
+        pokemon_id = pokemon_id,
+        user_id = user_id
         )
-        # print(form.name.data)
+        
+        noPokemon_id = pokemon_id == "" or pokemon_id == None
+        noUser_id = user_id == "" or user_id == None
+        if ( (noPokemon_id) or (noUser_id)):
+             return bad_request(400)
         db.session.add(binder)
         db.session.commit()
         db.session.close()
-        if binder is None:
-            abort(404)
+        
         
     except Exception as e:
         print(e)
@@ -42,6 +44,8 @@ def add_pokemon_card(jwt):
 
     return jsonify({
         'success': True,
+        'pokemon added': pokemon_id,
+        'pokemon card added to user id': user_id
 
     })
 
@@ -87,3 +91,11 @@ def not_found(error):
         "error": 404,
         "message": "resource not found"
     }), 404
+
+@binder.errorhandler(400)
+def bad_request(error):
+    return jsonify({
+        "success": False,
+        "error": 400,
+        "message": "Bad Request"
+    }), 400

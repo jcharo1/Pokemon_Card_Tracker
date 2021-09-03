@@ -81,14 +81,138 @@ class AppTestCase(unittest.TestCase):
         self.assertEqual(data['error'], 401)
         self.assertEqual(data['message'], "Unauthorized")
     
-    def create_new_user(self):
-        res = self.client().post('/user/create', json={"name": "ffff", "pokemongo_id": "ffff"}, headers=(get_headers(ADMIN_TOKEN)))
-        print(res)
+    def get_user_by_id(self):
+        res = self.client().get('/user/1', headers=(get_headers(ADMIN_TOKEN)))
+
+        
         data = json.loads(res.data)
         
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
+        self.assertEqual(data['id'], 1)
+    
+        
+    def test_not_found_404_get_user_by_id(self):
+        res = self.client().get('/user/2000', headers=(get_headers(ADMIN_TOKEN)))
+
+        
+        data = json.loads(res.data)
+        
+
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], "resource not found")
+    
+    def test_unauthorized_get_user_by_id(self):
+        res = self.client().get('/user/1')
+
+        
+        data = json.loads(res.data)
+        
+
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], "Unauthorized")
+    
+    def patch_user_by_id(self):
+        res = self.client().patch('/user/1', json={"name": "Likey likes to program", "pokemongo_id": "100"}, headers=(get_headers(ADMIN_TOKEN)))
+
+        
+        data = json.loads(res.data)
+        
+        
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertEqual(data['updated username'], 'Likey likes to program')
+        # test case fails for data['updated pokemonGO id'] but updates and passes after running agian 
+        self.assertEqual(data['updated pokemonGO id'], "100")
+    
+    def patch_user_by_id(self):
+        res = self.client().patch('/user/1', json={"name": "Likey likes to programmm", "pokemongo_id": "100000"}, headers=(get_headers(ADMIN_TOKEN)))
+
+        
+        data = json.loads(res.data)
+        
+        
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertEqual(data['updated username'], 'Likey likes to programmm')
+        # test case fails for data['updated pokemonGO id'] but updates and passes after running agian 
+        self.assertEqual(data['updated pokemonGO id'], "100000")
+    
+    def test_400_patch_user_by_id(self):
+        res = self.client().patch('/user/1', json={"name": "", "pokemongo_id": ""}, headers=(get_headers(ADMIN_TOKEN)))
+
+        
+        data = json.loads(res.data)
+        
+        
+        self.assertEqual(res.status_code, 400)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Bad Request')
+        self.assertEqual(data['error'], 400)
+    
+    def test_404_patch_user_by_id(self):
+        res = self.client().patch('/user/1000000', json={"name": "1111", "pokemongo_id": "111"}, headers=(get_headers(ADMIN_TOKEN)))
+
+        
+        data = json.loads(res.data)
+        
+        
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'resource not found')
+        self.assertEqual(data['error'], 404)
+
+    def test_401_patch_user_by_id(self):
+        res = self.client().patch('/user/1')
+
+        
+        data = json.loads(res.data)
+        
+
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], "Unauthorized")
+    
+    def add_card_to_binder(self):
+        res = self.client().post('/binder/', json={"pokemon_id": "Base1-7", "user_id": "20"}, headers=(get_headers(USER_TOKEN)))
+
+        data = json.loads(res.data)
+        
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertEqual(data['pokemon added'], 'Base1-7')
+        self.assertEqual(data['pokemon card added to user id'], '20')
+    
+
+    
+    def test_400_add_card_to_binder(self):
+        res = self.client().post('/binder/', json={"pokemon_id": "", "user_id": "20"}, headers=(get_headers(USER_TOKEN)))
+
+        data = json.loads(res.data)
+        
+
+        self.assertEqual(res.status_code, 400)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Bad Request')
+        self.assertEqual(data['error'], 400)
+    
+    def test_401_add_card_to_binder(self):
+        res = self.client().post('/binder/', json={"pokemon_id": "new user", "user_id": "20"})
+
+        data = json.loads(res.data)
+        
+
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], "Unauthorized")
+
+    
+
+
 
 
 

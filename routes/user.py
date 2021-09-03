@@ -20,17 +20,12 @@ all_pokemon = json.load(all_pokemon_set)
 @requires_auth('post:user')
 def create_user(jwt):
     
-    # print(request.form)
-    # print('------------------------------')
-    # form = UserForm(request.form)
-    
-
     try: 
         body = request.get_json()
         name = body.get('name')
         pokemongo_id = body.get('pokemongo_id')
         
-        print(type(name))
+        
         noName = name == "" or name == None
         noPokemongo_id = pokemongo_id == "" or pokemongo_id == None
         if ( (noName) or (noPokemongo_id)):
@@ -94,20 +89,20 @@ def retrieve_user_by_id(jwt, id):
     try:
         user = User.query.get(id)
         
+        noUserid = user == '' or user == None
+
+        if noUserid:
+            return not_found(404)    
+
 
         binder = user.pokemon_cards
-        # print(binder)
+    
         pokemon_binder = []
 
         for card in binder:
             pokemon_id = card.__dict__['pokemon_id']
             pokemon_binder.append(all_pokemon[pokemon_id])
 
-
-
-
-        if user is None:
-            not_found(404)
 
     except Exception as e:
         print(e)
@@ -132,25 +127,37 @@ def retrieve_user_by_id(jwt, id):
 @requires_auth('patch:user')
 def edit_user(jwt, id):
   
-    # print(request.form)
-    # # print('------------------------------')
-    # form = UserForm(request.form)
-    # user = User.query.get(id)
-
-
+    body = request.get_json()
+    name = body.get('name')
+    pokemongo_id = body.get('pokemongo_id')
+        
     try: 
-        form = UserForm(request.form)
+        
         user = User.query.get(id)
         
-        db.session.query(User).filter(User.id == id).update({
-            User.name:request.form['name'],
-            User.pokemongo_id:request.form['pokemongo_id']
-            })
-    
-        db.session.commit()
+        noUserid = user == '' or user == None
+
+        if noUserid:
+            return not_found(404)    
         
-        if user is None:
-            abort(404)
+        noName = name == "" or name == None
+        noPokemongo_id = pokemongo_id == "" or pokemongo_id == None
+        if ( (noName) or (noPokemongo_id)):
+             return bad_request(400)
+
+        db.session.query(User).filter(User.id == id).update({
+            User.name:name,
+            User.pokemongo_id:pokemongo_id
+            })
+        
+        db.session.commit()
+        db.session.close()
+        # db.session.query(User).filter(User.id == id ).get
+
+        # user = User.query.get(id)
+
+        
+
         
     except Exception as e :
         print(e)
@@ -159,8 +166,9 @@ def edit_user(jwt, id):
 
     return jsonify({
         'success': True,
-
-    })
+        'updated username': user.name,
+        'updated pokemonGO id': user.pokemongo_id
+        })
 
 
 
