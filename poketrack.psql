@@ -1,0 +1,231 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 13.3
+-- Dumped by pg_dump version 13.3
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: Binder; Type: TABLE; Schema: public; Owner: mike
+--
+
+CREATE TABLE public."Binder" (
+    id integer NOT NULL,
+    pokemon_id character varying NOT NULL,
+    user_id integer NOT NULL
+);
+
+
+ALTER TABLE public."Binder" OWNER TO mike;
+
+--
+-- Name: Binder_id_seq; Type: SEQUENCE; Schema: public; Owner: mike
+--
+
+CREATE SEQUENCE public."Binder_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public."Binder_id_seq" OWNER TO mike;
+
+--
+-- Name: Binder_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: mike
+--
+
+ALTER SEQUENCE public."Binder_id_seq" OWNED BY public."Binder".id;
+
+
+--
+-- Name: User; Type: TABLE; Schema: public; Owner: mike
+--
+
+CREATE TABLE public."User" (
+    id integer NOT NULL,
+    name character varying NOT NULL,
+    verified boolean,
+    pokemongo_id character varying NOT NULL
+);
+
+
+ALTER TABLE public."User" OWNER TO mike;
+
+--
+-- Name: User_id_seq; Type: SEQUENCE; Schema: public; Owner: mike
+--
+
+CREATE SEQUENCE public."User_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public."User_id_seq" OWNER TO mike;
+
+--
+-- Name: User_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: mike
+--
+
+ALTER SEQUENCE public."User_id_seq" OWNED BY public."User".id;
+
+
+--
+-- Name: alembic_version; Type: TABLE; Schema: public; Owner: mike
+--
+
+CREATE TABLE public.alembic_version (
+    version_num character varying(32) NOT NULL
+);
+
+
+ALTER TABLE public.alembic_version OWNER TO mike;
+
+--
+-- Name: Binder id; Type: DEFAULT; Schema: public; Owner: mike
+--
+
+ALTER TABLE ONLY public."Binder" ALTER COLUMN id SET DEFAULT nextval('public."Binder_id_seq"'::regclass);
+
+
+--
+-- Name: User id; Type: DEFAULT; Schema: public; Owner: mike
+--
+
+ALTER TABLE ONLY public."User" ALTER COLUMN id SET DEFAULT nextval('public."User_id_seq"'::regclass);
+
+
+--
+-- Data for Name: Binder; Type: TABLE DATA; Schema: public; Owner: mike
+--
+
+COPY public."Binder" (id, pokemon_id, user_id) FROM stdin;
+15	base1-6	2
+18	base1-9	2
+19	base1-9	2
+20	base1-9	2
+21	base1-9	2
+22	base1-4	1
+23	base1-5	1
+24	base1-5	1
+\.
+
+
+--
+-- Data for Name: User; Type: TABLE DATA; Schema: public; Owner: mike
+--
+
+COPY public."User" (id, name, verified, pokemongo_id) FROM stdin;
+3	charomandergod	f	212212313
+4	charomandergod	f	212212313
+5	charomandergod	f	212212313
+6	charomandergod	f	212212313
+7	charomandergod	f	212212313
+8	charomandergod	f	212212313
+9	charomandergod	f	212212313
+10	charomandergod	f	212212313
+11	charomandergod	f	212212313
+12	charomandergod	f	212212313
+13	charomandergod	f	212212313
+14	charomandergod	f	212212313
+15	charomandergod	f	212212313
+16		f	
+17		f	
+18		f	
+19		f	
+21		f	
+22		f	
+23		f	
+24	fgfgfgff	f	
+25	fgfgfgff	f	
+26		f	
+27		f	
+28	ffff	f	ffff
+29	ffff	f	ffff
+30	ffff	f	ffff
+31	ffff	f	ffff
+20	likey mc likey likeyy like	f	likeys pokemon id 
+1	Likey likes to programmm	f	100000
+2	new njjjjj4444444444ew helloo	f	0444444400000000000
+\.
+
+
+--
+-- Data for Name: alembic_version; Type: TABLE DATA; Schema: public; Owner: mike
+--
+
+COPY public.alembic_version (version_num) FROM stdin;
+\.
+
+
+--
+-- Name: Binder_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mike
+--
+
+SELECT pg_catalog.setval('public."Binder_id_seq"', 26, true);
+
+
+--
+-- Name: User_id_seq; Type: SEQUENCE SET; Schema: public; Owner: mike
+--
+
+SELECT pg_catalog.setval('public."User_id_seq"', 31, true);
+
+
+--
+-- Name: Binder Binder_pkey; Type: CONSTRAINT; Schema: public; Owner: mike
+--
+
+ALTER TABLE ONLY public."Binder"
+    ADD CONSTRAINT "Binder_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: User User_pkey; Type: CONSTRAINT; Schema: public; Owner: mike
+--
+
+ALTER TABLE ONLY public."User"
+    ADD CONSTRAINT "User_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: alembic_version alembic_version_pkc; Type: CONSTRAINT; Schema: public; Owner: mike
+--
+
+ALTER TABLE ONLY public.alembic_version
+    ADD CONSTRAINT alembic_version_pkc PRIMARY KEY (version_num);
+
+
+--
+-- Name: Binder Binder_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: mike
+--
+
+ALTER TABLE ONLY public."Binder"
+    ADD CONSTRAINT "Binder_user_id_fkey" FOREIGN KEY (user_id) REFERENCES public."User"(id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+

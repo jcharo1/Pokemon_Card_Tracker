@@ -53,8 +53,8 @@ def add_pokemon_card(jwt):
 @requires_auth('delete:card')
 def delete_pokemon_card(jwt):
     body = request.get_json()
-    # print(request.form)
-    # print('------------------------------')
+
+
     try: 
 
         pokemon_id = body.get('pokemon_id')
@@ -68,7 +68,7 @@ def delete_pokemon_card(jwt):
         db.session.close()
         
         if deleted == 0:
-            return not_found(404)
+            return bad_request(400)
         
     except Exception as e:
         print(e)
