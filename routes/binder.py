@@ -1,7 +1,7 @@
 import os
 from flask import Flask, request, abort, jsonify, flash
-from flask_wtf import form
-from forms import BinderForm
+# from flask_wtf import form
+# from forms import BinderForm
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import select, update, delete, and_
 from flask_cors import CORS
