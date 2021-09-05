@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, abort, jsonify
+from flask import Flask, request, abort, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_migrate import Migrate
@@ -25,9 +25,10 @@ def create_app(test_config=None):
 
 app = create_app()
 
-# @app.route('/')
-# def pokemonex():
-#     print('hello this is working')
+@app.route('/')
+def pokemonex():
+  return render_template('lol.html')
+  
 
 
 
