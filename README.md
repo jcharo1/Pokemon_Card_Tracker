@@ -1,5 +1,6 @@
 # Pokemon Card Binder API
-This is a mainly a back-end oriented project.A temporary front-end page is displayed for aesthetic purposes only and is non interactive.
+This is a mainly a back-end oriented project. A temporary front-end page is displayed for aesthetic purposes only and is non interactive.
+
 ## Capstone Project for Udacity's Full Stack Developer Nanodegree
 Heroku Link: https://online-poke-binder.herokuapp.com/
 
