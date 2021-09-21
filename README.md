@@ -1103,4 +1103,4 @@ API_AUDIENCE=pokemon
 ADMIN_TOKEN=
 USER_TOKEN=
 ```
-all postman endpoints have been exported to git hub with auth tokens included 
+all postman endpoints have been exported to git hub with auth tokens included .
