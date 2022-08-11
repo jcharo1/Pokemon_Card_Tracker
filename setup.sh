@@ -1,3 +1,5 @@
 
-EXPORT DATABASE_URL=postgresql://mike@localhost:5432/poketrack
-EXPORT API_AUDIENCE=pokemon
+
+export FLASK_APP=app.py
+export DATABASE_URL=postgresql://mike@localhost:5432/poketrack
+

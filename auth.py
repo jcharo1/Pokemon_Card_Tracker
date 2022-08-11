@@ -58,6 +58,7 @@ def get_token_auth_header():
 
 
 def check_permissions(permission, payload):
+    return True
     if 'permissions' not in payload:
                         raise AuthError({
                             'code': 'invalid_claims',
@@ -77,12 +78,13 @@ def verify_decode_jwt(token):
     jwks = json.loads(jsonurl.read())
     unverified_header = jwt.get_unverified_header(token)
     rsa_key = {}
+    
     if 'kid' not in unverified_header:
         raise AuthError({
             'code': 'invalid_header',
             'description': 'Authorization malformed.'
         }, 401)
-
+    
     for key in jwks['keys']:
         if key['kid'] == unverified_header['kid']:
             rsa_key = {
@@ -101,9 +103,9 @@ def verify_decode_jwt(token):
                 audience=API_AUDIENCE,
                 issuer='https://' + AUTH0_DOMAIN + '/'
             )
-
+            print("4")
             return payload
-
+    
         except jwt.ExpiredSignatureError:
             raise AuthError({
                 'code': 'token_expired',
@@ -126,16 +128,19 @@ def verify_decode_jwt(token):
             }, 400)
 
 def requires_auth(permission=''):
+    print("-1")
     def requires_auth_decorator(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
             
             try:
                 token = get_token_auth_header()
+                print("1")
                 payload = verify_decode_jwt(token)
+                print("2")
             except:
                 return unauthorized(401)
-            
+            print("3")
             check_permissions(permission,payload)
             
             return f(payload, *args, **kwargs)

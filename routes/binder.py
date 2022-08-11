@@ -81,7 +81,76 @@ def delete_pokemon_card(jwt):
 
     })
 
+@binder.route('/', methods=['GET'])
+def retrieve_all_sets():
+    try:
+        all_pokemon_set = open('./pokemonSets/all_pokemon.json')
+        all_pokemon = json.load(all_pokemon_set)
+        args = request.args
+   
+        name = args.get('name')
+        
 
+        args2= args.to_dict(flat=False)
+
+    
+        if "set[value]" not in args2 and len(args['name']) == 0:
+            return jsonify({
+                'success': True,
+                'pokemon': all_pokemon
+            })
+
+        if "set[value]" not in args2 and len(args['name']) > 0:
+
+            name = name.title()
+            name_pokemon = {}
+            for key, value in all_pokemon.items():
+                if key == name:
+                    name_pokemon[key] = value
+                if key.startswith(name):
+                    name_pokemon[key] = value
+            return jsonify({
+                'success': True,
+                'pokemon': name_pokemon
+            })
+        
+        sets={}
+        
+        for x in args2["set[value]"]:
+            sets[x] = x
+    
+        
+        
+
+        pokemon_to_return={}
+        if len (sets) != 0:
+           
+            for key, value in all_pokemon.items():
+                if value['set']['name'] in sets:
+                    pokemon_to_return[key] = value
+            
+            if len((args["name"]))==0:
+                return jsonify({
+                    'success': True,
+                    'pokemon': pokemon_to_return
+                })
+            else:
+                filterd={}
+                for key, value in pokemon_to_return.items():
+                    ne_name=args["name"]
+                    if key == ne_name.title():
+                        filterd[key] = value
+                    if key.startswith(ne_name.title()):
+                        filterd[key] = value
+                
+                return jsonify({
+                        "success": True,
+                        "pokemon": filterd
+                    })       
+    except Exception as e:
+        print(e)
+        abort(422)
+        
 
 
 @binder.errorhandler(404)

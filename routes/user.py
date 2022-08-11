@@ -17,8 +17,8 @@ db = SQLAlchemy()
 all_pokemon_set = open('pokemonSets/all_pokemon.json')
 all_pokemon = json.load(all_pokemon_set)
 @user.route('/create', methods=['POST'])
-@requires_auth('post:user')
-def create_user(jwt):
+# @requires_auth()
+def create_user():
     
     try: 
         body = request.get_json()
@@ -37,7 +37,9 @@ def create_user(jwt):
 
             db.session.add(user)
             db.session.commit()
+            print(user.id)
             db.session.close()
+        
         
     except Exception as e:
         print(e)
@@ -46,10 +48,12 @@ def create_user(jwt):
     
 
     return jsonify({
-        'success': True,})
+        'success': True,
+        'user_id': user.id
+        })
 
 
-@user.route('/', methods=['GET'])
+@user.route('', methods=['GET'])
 def retrieve_all_users():
     try:
         users = User.query.all()
@@ -80,13 +84,15 @@ def retrieve_all_users():
             'users': user_list,
             'total users': len(user_list)
 
+            
         })
 
 
 @user.route('/<int:id>', methods=['GET'])
-@requires_auth('get:user-id')
+@requires_auth()
 def retrieve_user_by_id(jwt, id):
     try:
+        print("i am inside the funciton endpoint")
         user = User.query.get(id)
         
         noUserid = user == '' or user == None

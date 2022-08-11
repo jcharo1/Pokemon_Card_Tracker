@@ -1,7 +1,7 @@
 import os
 from flask import Flask, request, abort, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from flask_migrate import Migrate
 # from forms import UserForm
 from models import db, setup_db, User, Binder
@@ -13,6 +13,7 @@ def create_app(test_config=None):
   # create and configure the app
     app = Flask(__name__)
     CORS(app)
+    
     setup_db(app)
     migrate = Migrate(app, db)
     from routes.user import user
