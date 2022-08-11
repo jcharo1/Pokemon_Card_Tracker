@@ -37,9 +37,9 @@ def create_user():
 
             db.session.add(user)
             db.session.commit()
-            print(user.id)
+            user_id=user.id
             db.session.close()
-        
+            
         
     except Exception as e:
         print(e)
@@ -49,7 +49,7 @@ def create_user():
 
     return jsonify({
         'success': True,
-        'user_id': user.id
+        'user_id': user_id,
         })
 
 
