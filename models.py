@@ -2,11 +2,12 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
+from config import database_path
 db = SQLAlchemy()
 
-database_path = os.getenv('DATABASE_URL')
 
 
+password = os.getenv('PASS')
 '''
 setup_db(app)
     binds a flask application and a SQLAlchemy service
