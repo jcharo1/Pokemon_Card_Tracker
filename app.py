@@ -28,6 +28,7 @@ app = create_app()
 
 @app.route('/')
 def pokemonex():
+  
   return 
   
 
