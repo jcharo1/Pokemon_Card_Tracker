@@ -28,7 +28,7 @@ app = create_app()
 
 @app.route('/')
 def pokemonex():
-  return render_template('lol.html')
+  return 
   
 
 
