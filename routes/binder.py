@@ -15,7 +15,7 @@ binder = Blueprint('binder', __name__, url_prefix='/binder')
 db = SQLAlchemy()
 
 @binder.route('/', methods=['POST'])
-@requires_auth('post:add-card')
+@requires_auth()
 def add_pokemon_card(jwt):
   
     body = request.get_json()

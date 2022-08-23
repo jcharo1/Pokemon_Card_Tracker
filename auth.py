@@ -9,7 +9,8 @@ from urllib.request import urlopen
 
 AUTH0_DOMAIN = 'fsnd778.us.auth0.com'
 ALGORITHMS = ['RS256']
-API_AUDIENCE = os.getenv('API_AUDIENCE')
+API_AUDIENCE = 'pokemon'
+# os.getenv('API_AUDIENCE')
 
 ## AuthError Exception
 '''
@@ -112,7 +113,8 @@ def verify_decode_jwt(token):
                 'description': 'Token expired.'
             }, 401)
 
-        except jwt.JWTClaimsError:
+        except jwt.JWTClaimsError as e:
+            print(e)
             raise AuthError({
                 'code': 'invalid_claims',
                 'description': 'Incorrect claims. Please, check the audience and issuer.'
@@ -138,7 +140,8 @@ def requires_auth(permission=''):
                 print("1")
                 payload = verify_decode_jwt(token)
                 print("2")
-            except:
+            except Exception as e:
+                print(e)
                 return unauthorized(401)
             print("3")
             check_permissions(permission,payload)

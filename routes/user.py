@@ -92,7 +92,7 @@ def retrieve_all_users():
 @requires_auth()
 def retrieve_user_by_id(jwt, id):
     try:
-        print("i am inside the funciton endpoint")
+    
         user = User.query.get(id)
         
         noUserid = user == '' or user == None
@@ -104,15 +104,18 @@ def retrieve_user_by_id(jwt, id):
         binder = user.pokemon_cards
     
         pokemon_binder = []
-
+        baseSet=[]
         for card in binder:
+            
             pokemon_id = card.__dict__['pokemon_id']
+            print(pokemon_id)
             pokemon_binder.append(all_pokemon[pokemon_id])
-
+            print(all_pokemon[pokemon_id]["set"]["name"])
+            
 
     except Exception as e:
         print(e)
-        abort(422)
+        abort(500)
         
 
     return jsonify({
@@ -122,6 +125,9 @@ def retrieve_user_by_id(jwt, id):
             'verified': user.verified,
             'pokemongo_id': user.pokemongo_id,
             'pokemon_cards': pokemon_binder
+            # 'Base_Set':
+            # 'Jungle_Set':
+            # 'Fossil_Set':
 
         })
 
