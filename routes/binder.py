@@ -104,7 +104,7 @@ def retrieve_all_sets():
             
             return jsonify({
                 'success': True,
-                'pokemon': all_pokemon
+                'pokemon': all_pokemon_list
             })
 
         if "set[value]" not in args2 and len(args['name']) > 0:
