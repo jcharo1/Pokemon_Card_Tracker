@@ -29,6 +29,7 @@ def get_token_auth_header():
     """Obtains the Access Token from the Authorization Header
     """
     auth = request.headers.get('Authorization', None)
+   
     if not auth:
         raise AuthError({
             'code': 'authorization_header_missing',
@@ -104,7 +105,7 @@ def verify_decode_jwt(token):
                 audience=API_AUDIENCE,
                 issuer='https://' + AUTH0_DOMAIN + '/'
             )
-            print("4")
+            
             return payload
     
         except jwt.ExpiredSignatureError:
@@ -130,20 +131,20 @@ def verify_decode_jwt(token):
             }, 400)
 
 def requires_auth(permission=''):
-    print("-1")
+    
     def requires_auth_decorator(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
             
             try:
                 token = get_token_auth_header()
-                print("1")
+               
                 payload = verify_decode_jwt(token)
-                print("2")
+            
             except Exception as e:
                 print(e)
                 return unauthorized(401)
-            print("3")
+        
             check_permissions(permission,payload)
             
             return f(payload, *args, **kwargs)

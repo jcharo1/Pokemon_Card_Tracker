@@ -104,14 +104,22 @@ def retrieve_user_by_id(jwt, id):
         binder = user.pokemon_cards
     
         pokemon_binder = []
-        baseSet=[]
+        baseSet={}
+        jungleSet={}
+        fossilSet={}
         for card in binder:
             
             pokemon_id = card.__dict__['pokemon_id']
-            print(pokemon_id)
+        
             pokemon_binder.append(all_pokemon[pokemon_id])
-            print(all_pokemon[pokemon_id]["set"]["name"])
-            
+         
+            if all_pokemon[pokemon_id]["set"]["name"] == "Base":
+                baseSet[pokemon_id]=0
+            if all_pokemon[pokemon_id]["set"]["name"] == "Fossil":
+                jungleSet[pokemon_id]=0
+            if all_pokemon[pokemon_id]["set"]["name"] == "Jungle":
+                fossilSet[pokemon_id]=0
+
 
     except Exception as e:
         print(e)
@@ -124,10 +132,10 @@ def retrieve_user_by_id(jwt, id):
             'name': user.name,
             'verified': user.verified,
             'pokemongo_id': user.pokemongo_id,
-            'pokemon_cards': pokemon_binder
-            # 'Base_Set':
-            # 'Jungle_Set':
-            # 'Fossil_Set':
+            'pokemon_cards': pokemon_binder,
+            'Base_Set': len(baseSet),
+            'Jungle_Set': len(jungleSet),
+            'Fossil_Set': len(fossilSet),
 
         })
 

@@ -39,7 +39,7 @@ def add_pokemon_card(jwt):
         
     except Exception as e:
         print(e)
-        abort(422)
+        abort(500)
     
 
     return jsonify({
@@ -50,10 +50,10 @@ def add_pokemon_card(jwt):
     })
 
 @binder.route('/', methods=['DELETE'])
-@requires_auth('delete:card')
+@requires_auth()
 def delete_pokemon_card(jwt):
     body = request.get_json()
-
+    print(body)
 
     try: 
 
@@ -68,11 +68,14 @@ def delete_pokemon_card(jwt):
         db.session.close()
         
         if deleted == 0:
-            return bad_request(400)
+            return jsonify({
+                'success':False,
+                'deleted':"Unable to delete card, you may not have this card in your Binder"
+            })
         
     except Exception as e:
         print(e)
-        abort(422)
+        abort(500)
     
 
     return jsonify({
@@ -95,6 +98,10 @@ def retrieve_all_sets():
 
     
         if "set[value]" not in args2 and len(args['name']) == 0:
+            all_pokemon_list=[]
+            for key,value in all_pokemon.items():
+                all_pokemon_list.append(value)
+            
             return jsonify({
                 'success': True,
                 'pokemon': all_pokemon
@@ -109,9 +116,12 @@ def retrieve_all_sets():
                     name_pokemon[key] = value
                 if key.startswith(name):
                     name_pokemon[key] = value
+            all_pokemon_list=[]
+            for key,value in name_pokemon.items():
+                all_pokemon_list.append(value)
             return jsonify({
                 'success': True,
-                'pokemon': name_pokemon
+                'pokemon': all_pokemon_list
             })
         
         sets={}
@@ -130,9 +140,12 @@ def retrieve_all_sets():
                     pokemon_to_return[key] = value
             
             if len((args["name"]))==0:
+                all_pokemon_list=[]
+                for key,value in pokemon_to_return.items():
+                    all_pokemon_list.append(value)
                 return jsonify({
                     'success': True,
-                    'pokemon': pokemon_to_return
+                    'pokemon': all_pokemon_list
                 })
             else:
                 filterd={}
@@ -142,10 +155,12 @@ def retrieve_all_sets():
                         filterd[key] = value
                     if key.startswith(ne_name.title()):
                         filterd[key] = value
-                
+                all_pokemon_list=[]
+                for key,value in filterd.items():
+                    all_pokemon_list.append(value)
                 return jsonify({
                         "success": True,
-                        "pokemon": filterd
+                        "pokemon": all_pokemon_list
                     })       
     except Exception as e:
         print(e)
