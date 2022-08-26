@@ -44,8 +44,8 @@ def add_pokemon_card(jwt):
 
     return jsonify({
         'success': True,
-        'pokemon added': pokemon_id,
-        'pokemon card added to user id': user_id
+        'pokemon_added': pokemon_id,
+        'added_to_id': user_id
 
     })
 
@@ -70,7 +70,7 @@ def delete_pokemon_card(jwt):
         if deleted == 0:
             return jsonify({
                 'success':False,
-                'deleted':"Unable to delete card, you may not have this card in your Binder"
+                'deleted':f"Unable to delete {pokemon_id}, you may not have this card in your Binder"
             })
         
     except Exception as e:
@@ -80,7 +80,7 @@ def delete_pokemon_card(jwt):
 
     return jsonify({
         'success': True,
-        'deleted': deleted,
+        'deleted': pokemon_id,
 
     })
 
