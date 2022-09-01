@@ -1,7 +1,11 @@
+Pokebinder
+
 # Pokemon Card Binder API
+
 This is a mainly a back-end oriented project. A temporary front-end page is displayed for aesthetic purposes only and is non interactive.
 
 ## Capstone Project for Udacity's Full Stack Developer Nanodegree
+
 Heroku Link: https://online-poke-binder.herokuapp.com/
 
 While running locally: http://localhost:5000
@@ -30,36 +34,36 @@ This will install all of the required packages.
 
 ##### Key Dependencies
 
-- [Flask](http://flask.pocoo.org/)  is a lightweight backend microservices framework. Flask is required to handle requests and responses.
+- [Flask](http://flask.pocoo.org/) is a lightweight backend microservices framework. Flask is required to handle requests and responses.
 
-- [SQLAlchemy](https://www.sqlalchemy.org/) is the Python SQL toolkit and ORM we'll use handle the lightweight sqlite database. You'll primarily work in app.py and can reference models.py. 
-
+- [SQLAlchemy](https://www.sqlalchemy.org/) is the Python SQL toolkit and ORM we'll use handle the lightweight sqlite database. You'll primarily work in app.py and can reference models.py.
 
 ## Database Setup Locally
+
 With Postgres running, initialize the the database
+
 ```bash
 createdb poketrack
 
 psql poketrack < poketrack.psql
 ```
 
-
 ## Enviorment variables
 
-
-In order to set enviorment varibles for test cases create a .test.env  and update with your information 
+In order to set enviorment varibles for test cases create a .test.env and update with your information
 a .test.env file has been included with valid tokens for testing purposes
 ie
+
 ```
 DATABASE_URL=postgresql://@localhost:5432/poketrack
 API_AUDIENCE=pokemon
 ADMIN_TOKEN=
 USER_TOKEN=
 ```
-all postman endpoints have been exported to git hub with auth tokens included 
+
+all postman endpoints have been exported to git hub with auth tokens included
+
 ## Running the server
-
-
 
 To run the server, execute:
 
@@ -69,13 +73,14 @@ export FLASK_APP=app.py
 flask run --reload
 ```
 
-Setting the `FLASK_APP` variable to `app.py` directs flask to use the `app.py` file to find the application. 
+Setting the `FLASK_APP` variable to `app.py` directs flask to use the `app.py` file to find the application.
 
 Using the `--reload` flag will detect file changes and restart the server automatically.
 
 ## API Reference
 
 ## Getting Started
+
 Base URL: This application can be run locally. The hosted version is at `https://online-poke-binder.herokuapp.com/`.
 
 Authentication: This application requires authentication to perform various actions. All the endpoints require
@@ -83,25 +88,25 @@ various permissions, except the root (or health) endpoint, that are passed via t
 
 The application has three different types of roles:
 
+- Public
+- can get all users
+- has 'get:users' permissions
 
--  Public
-  - can get all users
-  - has 'get:users' permissions
+- User
 
--  User
-
-  - has `delete:actor, delete:movie` permissions
-  - can get user by id , add cards and delete cards
-  - has `get:user-id, post:add-card, delete:card` permissions
+- has `delete:actor, delete:movie` permissions
+- can get user by id , add cards and delete cards
+- has `get:user-id, post:add-card, delete:card` permissions
 
 - Admin
   - can perform all the actions
   - can post new users, edit users, get users by id, add cards, delete cards and get all users
-  - has `post:user, patch:user, get:user-id, post:add-card, delete:card, get:users` permissions 
-
+  - has `post:user, patch:user, get:user-id, post:add-card, delete:card, get:users` permissions
 
 ## Error Handling
+
 Errors are returned as JSON objects in the following format:
+
 ```
 {
     "error": 404,
@@ -111,24 +116,27 @@ Errors are returned as JSON objects in the following format:
 ```
 
 The API will return the following errors based on how the request fails:
- - 400: Bad Request
- - 401: Unauthorized
- - 403: Forbidden
- - 404: Not Found
- - 405: Method Not Allowed
- - 422: Unprocessable Entity
- - 500: Internal Server Error
+
+- 400: Bad Request
+- 401: Unauthorized
+- 403: Forbidden
+- 404: Not Found
+- 405: Method Not Allowed
+- 422: Unprocessable Entity
+- 500: Internal Server Error
 
 ## Endpoints
 
 #### GET /
- - General
-   - root endpoint
-   - can also work to check if the api is up and running
-   - is a public endpoint, requires no authentication
- 
- - Sample Request
-   - `https://online-poke-binder.herokuapp.com/`
+
+- General
+
+  - root endpoint
+  - can also work to check if the api is up and running
+  - is a public endpoint, requires no authentication
+
+- Sample Request
+  - `https://online-poke-binder.herokuapp.com/`
 
 <details>
 <summary>Sample Response</summary>
@@ -142,12 +150,14 @@ The API will return the following errors based on how the request fails:
 </details>
 
 #### GET /user
- - General
-   - gets the list of all users
-   - requires no permission
- 
- - Sample Request
-   - `https://online-poke-binder.herokuapp.com/user`
+
+- General
+
+  - gets the list of all users
+  - requires no permission
+
+- Sample Request
+  - `https://online-poke-binder.herokuapp.com/user`
 
 <details>
 <summary>Sample Response</summary>
@@ -356,12 +366,14 @@ The API will return the following errors based on how the request fails:
 </details>
 
 #### GET /user/<int:id>
- - General
-   - gets user by id and pokemon binder asscoiated with user
-   - requires `get:user-id` permission
- 
- - Sample Request
-   - `https://online-poke-binder.herokuapp.com/user/2`
+
+- General
+
+  - gets user by id and pokemon binder asscoiated with user
+  - requires `get:user-id` permission
+
+- Sample Request
+  - `https://online-poke-binder.herokuapp.com/user/2`
 
 <details>
 <summary>Sample Response</summary>
@@ -966,27 +978,30 @@ The API will return the following errors based on how the request fails:
     "success": true,
     "verified": false
 ```
-  
+
 </details>
 
 #### POST /user/create
- - General
-   - creates a new  user
-   - requires `post:user` permission
- 
- - Request Body
-   - name: string, required
-   - pokemongo_id: string, required
- 
- - Sample Request
-   - `https://online-poke-binder.herokuapp.com/user/create`
-   - Request Body
-     ```
-        {
-            "name": "ffff",
-            "pokemongo_id": "ffff"
-        }
-     ```
+
+- General
+
+  - creates a new user
+  - requires `post:user` permission
+
+- Request Body
+
+  - name: string, required
+  - pokemongo_id: string, required
+
+- Sample Request
+  - `https://online-poke-binder.herokuapp.com/user/create`
+  - Request Body
+    ```
+       {
+           "name": "ffff",
+           "pokemongo_id": "ffff"
+       }
+    ```
 
 <details>
 <summary>Sample Response</summary>
@@ -996,28 +1011,30 @@ The API will return the following errors based on how the request fails:
     "success": true
 }
 ```
-  
+
 </details>
 
 #### PATCH /user/<int:id>
- - General
-   - updates user info
-   - requires `patch:user` permission
- 
- - Request Body (at least one of the following fields required)
-   - name: string, required
-   - pokemongo_id: string, required
 
- 
- - Sample Request
-   - `https://online-poke-binder.herokuapp.com/user/2`
-   - Request Body
-     ```
-        {
-            "name": "new",
-            "pokemongo_id": "39393993"  
-        }
-     ```
+- General
+
+  - updates user info
+  - requires `patch:user` permission
+
+- Request Body (at least one of the following fields required)
+
+  - name: string, required
+  - pokemongo_id: string, required
+
+- Sample Request
+  - `https://online-poke-binder.herokuapp.com/user/2`
+  - Request Body
+    ```
+       {
+           "name": "new",
+           "pokemongo_id": "39393993"
+       }
+    ```
 
 <details>
 <summary>Sample Response</summary>
@@ -1030,17 +1047,18 @@ The API will return the following errors based on how the request fails:
     }
 
 ```
-  
+
 </details>
 
 #### DELETE /binder
- - General
-   - deletes the pokemon card from binder
-   - requires `delete:card` permission
-  
- 
- - Sample Request
-   - `https://online-poke-binder.herokuapp.com/binder`
+
+- General
+
+  - deletes the pokemon card from binder
+  - requires `delete:card` permission
+
+- Sample Request
+  - `https://online-poke-binder.herokuapp.com/binder`
 
 <details>
 <summary>Sample Response</summary>
@@ -1051,29 +1069,31 @@ The API will return the following errors based on how the request fails:
     "success": true
 }
 ```
-  
+
 </details>
 
 #### POST /binder
- - General
-   - adds card to binder
-   - requires `post:add-card` permission
 
- - Request Body (at least one of the following fields required)
-   - pokemon_id: string, required
-   - user_id: string, required
+- General
 
- 
- - Sample Request
-   - `https://online-poke-binder.herokuapp.com/binder/`
-   - Request Body
-     ```
-        {
-            "pokemon_id": "base1-2",
-            "user_id": "2"
-        }
-     ```
- 
+  - adds card to binder
+  - requires `post:add-card` permission
+
+- Request Body (at least one of the following fields required)
+
+  - pokemon_id: string, required
+  - user_id: string, required
+
+- Sample Request
+  - `https://online-poke-binder.herokuapp.com/binder/`
+  - Request Body
+    ```
+       {
+           "pokemon_id": "base1-2",
+           "user_id": "2"
+       }
+    ```
+
 <details>
 <summary>Sample Response</summary>
 
@@ -1086,21 +1106,24 @@ The API will return the following errors based on how the request fails:
 ```
 
 ## Testing
+
 For testing the backend, run the following commands (in the exact order):
+
 ```
 createdb poketrack_test
 psql poketrack_test < poketrack.psql
 python test_app.py
 ```
 
-
-In order to set enviorment varibles for test cases create a .test.env  and update with your information 
+In order to set enviorment varibles for test cases create a .test.env and update with your information
 a .test.env file has been included with valid tokens for testing purposes
 ie
+
 ```
 DATABASE_URL=postgresql://@localhost:5432/poketrack_test
 API_AUDIENCE=pokemon
 ADMIN_TOKEN=
 USER_TOKEN=
 ```
+
 all postman endpoints have been exported to git hub with auth tokens included .

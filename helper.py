@@ -21,15 +21,19 @@ import json
 
 # print(web_page)
 
-all_pokemon_set = open('pokemonSets/all_pokemon.json')
+all_pokemon_set = open('pokemonSets/all_sets.json')
 all_pokemon = json.load(all_pokemon_set)
+
+
+
 
 
 # mikes_set = open('pokemonSets/all_pokemon.json')
 # all_pokemon = json.load(mikes_set)
 
-print(all_pokemon['base1-4'])
-
+for x in all_pokemon:
+    if x["set"]["id"] == 'base5':
+        print(x["name"])
 # data = get_pokemon_data('base3-1')
 # print(data)
     # acess the pokemon list and interate throught the list to find pokemon id that was passed in 
