@@ -10,6 +10,14 @@ from flask import current_app, Blueprint, render_template
 import json
 from auth import AuthError, requires_auth
 from jose import jwt
+from pokemontcgsdk import Card
+from pokemontcgsdk import Set
+from pokemontcgsdk import Type
+from pokemontcgsdk import Supertype
+from pokemontcgsdk import Subtype
+from pokemontcgsdk import Rarity
+
+
 binder = Blueprint('binder', __name__, url_prefix='/binder')
 
 db = SQLAlchemy()
@@ -85,87 +93,155 @@ def delete_pokemon_card(jwt):
     })
 
 @binder.route('/', methods=['GET'])
-def retrieve_all_sets():
+def search_all_cards():
     try:
-        all_pokemon_set = open('./pokemonSets/all_pokemon.json')
-        all_pokemon = json.load(all_pokemon_set)
+        # all_pokemon_set = open('./pokemonSets/all_pokemon.json')
+        # all_pokemon = json.load(all_pokemon_set)
         args = request.args
-   
+        
         name = args.get('name')
-        
 
+    
         args2= args.to_dict(flat=False)
-
     
-        if "set[value]" not in args2 and len(args['name']) == 0:
-            all_pokemon_list=[]
-            for key,value in all_pokemon.items():
-                all_pokemon_list.append(value)
+        datalist=[]
+        cards=Card.where(q=f'name:{name}*')
+
+
+        for data in cards:
+            datalist.append(data)
+    
+        return jsonify({
+                'success': True,
+                'pokemon': datalist
+            })
+
+        # if "set[value]" not in args2 and len(args['name']) == 0:
+        #     all_pokemon_list=[]
+        #     for key,value in all_pokemon.items():
+        #         all_pokemon_list.append(value)
             
-            return jsonify({
-                'success': True,
-                'pokemon': all_pokemon_list
-            })
+        #     return jsonify({
+        #         'success': True,
+        #         'pokemon': all_pokemon_list
+        #     })
 
-        if "set[value]" not in args2 and len(args['name']) > 0:
+        # if "set[value]" not in args2 and len(args['name']) > 0:
 
-            name = name.title()
-            name_pokemon = {}
-            for key, value in all_pokemon.items():
-                if key == name:
-                    name_pokemon[key] = value
-                if key.startswith(name):
-                    name_pokemon[key] = value
-            all_pokemon_list=[]
-            for key,value in name_pokemon.items():
-                all_pokemon_list.append(value)
-            return jsonify({
-                'success': True,
-                'pokemon': all_pokemon_list
-            })
+        #     name = name.title()
+        #     name_pokemon = {}
+        #     for key, value in all_pokemon.items():
+        #         if key == name:
+        #             name_pokemon[key] = value
+        #         if key.startswith(name):
+        #             name_pokemon[key] = value
+        #     all_pokemon_list=[]
+        #     for key,value in name_pokemon.items():
+        #         all_pokemon_list.append(value)
+        #     return jsonify({
+        #         'success': True,
+        #         'pokemon': all_pokemon_list
+        #     })
         
-        sets={}
+        # sets={}
         
-        for x in args2["set[value]"]:
-            sets[x] = x
+        # for x in args2["set[value]"]:
+        #     sets[x] = x
     
         
         
 
-        pokemon_to_return={}
-        if len (sets) != 0:
+        # pokemon_to_return={}
+        # if len (sets) != 0:
            
-            for key, value in all_pokemon.items():
-                if value['set']['name'] in sets:
-                    pokemon_to_return[key] = value
+        #     for key, value in all_pokemon.items():
+        #         if value['set']['name'] in sets:
+        #             pokemon_to_return[key] = value
             
-            if len((args["name"]))==0:
-                all_pokemon_list=[]
-                for key,value in pokemon_to_return.items():
-                    all_pokemon_list.append(value)
-                return jsonify({
-                    'success': True,
-                    'pokemon': all_pokemon_list
-                })
-            else:
-                filterd={}
-                for key, value in pokemon_to_return.items():
-                    ne_name=args["name"]
-                    if key == ne_name.title():
-                        filterd[key] = value
-                    if key.startswith(ne_name.title()):
-                        filterd[key] = value
-                all_pokemon_list=[]
-                for key,value in filterd.items():
-                    all_pokemon_list.append(value)
-                return jsonify({
-                        "success": True,
-                        "pokemon": all_pokemon_list
-                    })       
+        #     if len((args["name"]))==0:
+        #         all_pokemon_list=[]
+        #         for key,value in pokemon_to_return.items():
+        #             all_pokemon_list.append(value)
+        #         return jsonify({
+        #             'success': True,
+        #             'pokemon': all_pokemon_list
+        #         })
+        #     else:
+        #         filterd={}
+        #         for key, value in pokemon_to_return.items():
+        #             ne_name=args["name"]
+        #             if key == ne_name.title():
+        #                 filterd[key] = value
+        #             if key.startswith(ne_name.title()):
+        #                 filterd[key] = value
+        #         all_pokemon_list=[]
+        #         for key,value in filterd.items():
+        #             all_pokemon_list.append(value)
+        #         return jsonify({
+        #                 "success": True,
+        #                 "pokemon": all_pokemon_list
+        #             })       
     except Exception as e:
         print(e)
         abort(422)
+
+
+
+@binder.route('/set', methods=['GET'])
+def retrieve_all_sets():
+    try:
+        # all_pokemon_set = open('./pokemonSets/all_pokemon.json')
+        # all_pokemon = json.load(all_pokemon_set)
+
         
+
+        # all_sets = Set.all() # a list of set
+
+
+        # collections_by_series={} # organize set objs by series collections
+        # for set in all_sets:
+        #     if set.series not in collections_by_series:
+        #         collections_by_series[set.series]=[set]
+        #     else:
+        #         collections_by_series[set.series]+=[set]
+
+
+        # output=[] 
+        # #convert dict to list
+        # for set in collections_by_series:
+            
+        #     output.append(set)
+
+
+    
+
+        all_sets = Set.all() # a list of set
+
+
+        collections_by_series={} # organize set objs by series collections
+        for set in all_sets:
+            datadict={}
+            datadict["setName"]= set.name
+            datadict["symbolImage"]= set.images.symbol
+            datadict["logo"]= set.images.logo
+            datadict["series"]= set.series
+            datadict["total"]= set.total
+            datadict["releaseDate"]= set.releaseDate
+            if set.series not in collections_by_series:
+                
+                collections_by_series[set.series]=[]
+
+        
+            collections_by_series[set.series].append(datadict)
+            
+        return jsonify({
+                'success': True,
+                'pokemon': collections_by_series
+            })
+
+    except Exception as e:
+        print(e)
+        abort(422)
 
 
 @binder.errorhandler(404)
